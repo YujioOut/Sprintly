@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Upload Music / SFX Pack – Creator Hub</title>
+    <style>
+      /* Shared Styles */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: #f9fafb;
+        color: #1f2937;
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+      }
+      .header {
+        text-align: center;
+        padding: 2rem 1rem;
+        background: #fff;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+      }
+      .logo {
+        font-size: 2rem;
+        font-weight: 700;
+      }
+      .tagline {
+        margin-top: 0.5rem;
+        font-size: 1rem;
+        color: #4b5563;
+      }
+      .upload-container {
+        max-width: 600px;
+        margin: 3rem auto;
+        padding: 1rem;
+      }
+      .upload-container h1 {
+        font-size: 1.75rem;
+        margin-bottom: 1rem;
+      }
+      form {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+      }
+      input[type="file"] {
+        padding: 0.75rem;
+        border: 1px solid #d1d5db;
+        border-radius: 0.5rem;
+      }
+      button {
+        align-self: flex-start;
+        padding: 0.75rem 1.25rem;
+        border: none;
+        border-radius: 0.5rem;
+        background: #3b82f6;
+        color: #fff;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background 0.2s ease;
+      }
+      button:hover {
+        background: #2563eb;
+      }
+      .audio-list {
+        list-style: none;
+        margin-top: 1rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+      }
+      .audio-item {
+        background: #fff;
+        border-radius: 0.5rem;
+        padding: 0.5rem;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+      }
+      audio {
+        width: 100%;
+      }
+      .footer {
+        text-align: center;
+        padding: 1rem;
+        background: #fff;
+        font-size: 0.875rem;
+        color: #6b7280;
+        box-shadow: 0 -2px 6px rgba(0, 0, 0, 0.05);
+      }
+    </style>
+  </head>
+  <body>
+    <header class="header">
+      <h1 class="logo">Creator Hub</h1>
+      <p class="tagline">
+        Upload & share your art, music, code, or games effortlessly.
+      </p>
+    </header>
+
+    <main class="upload-container">
+      <h1>Upload Your Music / SFX Pack</h1>
+      <form id="musicUploadForm">
+        <label for="musicFiles">Select audio files or a .zip bundle:</label>
+        <input
+          id="musicFiles"
+          type="file"
+          accept="audio/*,.zip"
+          multiple
+          required
+        />
+        <button type="submit">Upload & Preview</button>
+      </form>
+      <ul id="audioPreview" class="audio-list hidden"></ul>
+    </main>
+
+    <footer class="footer"><p>© 2025 Creator Hub. Prototype build.</p></footer>
+
+    <script>
+      const musicForm = document.getElementById("musicUploadForm");
+      const musicInput = document.getElementById("musicFiles");
+      const audioList = document.getElementById("audioPreview");
+
+      musicForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const files = Array.from(musicInput.files);
+        if (!files.length) return;
+
+        const audioFiles = files.filter((f) => f.type.startsWith("audio/"));
+        if (audioFiles.length) {
+          audioList.innerHTML = "";
+          audioFiles.forEach((f) => {
+            const url = URL.createObjectURL(f);
+            const li = document.createElement("li");
+            li.className = "audio-item";
+            li.innerHTML = `<p>${f.name}</p><audio controls src="${url}"></audio>`;
+            audioList.appendChild(li);
+          });
+          audioList.classList.remove("hidden");
+        } else {
+          alert(
+            "ZIP upload received! In production, this will unpack & create audio previews automatically."
+          );
+        }
+      });
+    </script>
+  </body>
+</html>
